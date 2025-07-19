@@ -1,0 +1,33 @@
+name: Actualizar Gists en README
+
+on:
+  schedule:
+    - cron: '0 5 * * 1'  # lune 5
+  workflow_dispatch:     # manual run
+
+jobs:
+  update-gists:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Configurar Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Instalar dependencias
+      run: pip install requests
+
+    - name: Ejecutar script
+      run: python scripts/update-gists.py
+
+    - name: Commit y push si hay cambios
+      run: |
+        git config --global user.name "GitHub Action"
+        git config --global user.email "action@github.com"
+        git diff
+        git add README.md
+        git commit -m "🔄 Actualizar lista de Gists" || echo "Sin cambios"
+        git push
