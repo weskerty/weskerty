@@ -2,14 +2,14 @@ name: Actualizar Gists en README
 
 on:
   schedule:
-    - cron: '0 5 * * 1'  # Lunes a las 5 AM UTC
-  workflow_dispatch:     # Permitir ejecución manual
+    - cron: '0 5 * * 1'
+  workflow_dispatch:
 
 jobs:
   update-gists:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # Permisos para escribir al repositorio
+      contents: write
 
     steps:
     - name: Checkout repository
@@ -18,7 +18,7 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Configurar Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.x'
 
