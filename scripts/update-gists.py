@@ -2,7 +2,6 @@ import requests
 import datetime
 import os
 import sys
-import time
 
 USERNAME = "weskerty"
 GIST_COUNT = 5
@@ -11,7 +10,6 @@ START = "<!-- GIST-LIST:START -->"
 END = "<!-- GIST-LIST:END -->"
 
 def fetch_gists():
-    """Obtiene la lista de gists más recientes del usuario."""
     try:
         headers = {
             'Accept': 'application/vnd.github+json',
@@ -27,67 +25,33 @@ def fetch_gists():
         
         url = f"https://api.github.com/users/{USERNAME}/gists"
         
-        for attempt in range(3):
-            try:
-                res = requests.get(url, headers=headers, timeout=30)
-                
-                if res.status_code == 403:
-                    rate_limit_remaining = res.headers.get('X-RateLimit-Remaining', 'unknown')
-                    rate_limit_reset = res.headers.get('X-RateLimit-Reset', 'unknown')
-                    print(f"Rate limit - Remaining: {rate_limit_remaining}, Reset: {rate_limit_reset}")
-                    
-                    if attempt < 2:
-                        print(f"Intento {attempt + 1} falló con 403, esperando 60 segundos...")
-                        time.sleep(60)
-                        continue
-                    else:
-                        print("Error 403: Acceso denegado. Verifica que:")
-                        print("1. Los gists sean públicos")
-                        print("2. El token tenga los permisos correctos")
-                        print("3. No hayas excedido el rate limit")
-                        return []
-                
-                elif res.status_code == 404:
-                    print(f"Usuario {USERNAME} no encontrado o no tiene gists públicos")
-                    return []
-                
-                res.raise_for_status()
-                
-                gists = res.json()
-                if not isinstance(gists, list):
-                    print("Respuesta inesperada de la API")
-                    return []
-                
-                public_gists = [g for g in gists if g.get('public', True)]
-                
-                print(f"Se encontraron {len(public_gists)} gists públicos")
-                return public_gists[:GIST_COUNT]
-                
-            except requests.exceptions.Timeout:
-                print(f"Timeout en intento {attempt + 1}")
-                if attempt < 2:
-                    time.sleep(10)
-                    continue
-                else:
-                    raise
-            except requests.exceptions.RequestException as e:
-                print(f"Error en intento {attempt + 1}: {e}")
-                if attempt < 2:
-                    time.sleep(10)
-                    continue
-                else:
-                    raise
+        res = requests.get(url, headers=headers, timeout=30)
         
-        return []
+        if res.status_code == 403:
+            print("Error 403: No se pudo acceder a los gists")
+            return None
+        
+        if res.status_code == 404:
+            print(f"Usuario {USERNAME} no encontrado")
+            return None
+        
+        res.raise_for_status()
+        
+        gists = res.json()
+        if not isinstance(gists, list):
+            return None
+        
+        public_gists = [g for g in gists if g.get('public', True)]
+        print(f"Se encontraron {len(public_gists)} gists públicos")
+        return public_gists[:GIST_COUNT]
         
     except Exception as e:
         print(f"Error al obtener gists: {e}")
-        return []
+        return None
 
 def format_gists(gists):
-    """Formatea los gists en markdown."""
     if not gists:
-        return "No hay gists públicos disponibles."
+        return None
     
     lines = []
     for gist in gists:
@@ -119,10 +83,13 @@ def format_gists(gists):
             print(f"Error procesando gist: {e}")
             continue
     
-    return "\n".join(lines) if lines else "No se pudieron procesar los gists."
+    return "\n".join(lines) if lines else None
 
 def update_readme(new_content):
-    """Actualiza el README.md con el nuevo contenido de gists."""
+    if new_content is None:
+        print("No se pudo obtener contenido de gists, no se actualiza el README")
+        return True
+    
     try:
         with open(README_FILE, "r", encoding="utf-8") as f:
             readme = f.read()
@@ -138,9 +105,6 @@ def update_readme(new_content):
     
     if start_idx == -1 or end_idx == -1:
         print(f"Marcadores no encontrados en {README_FILE}")
-        print("Asegúrate de que el README tenga:")
-        print(START)
-        print(END)
         return False
 
     updated = (
@@ -168,7 +132,9 @@ if __name__ == "__main__":
     try:
         gists = fetch_gists()
         md_content = format_gists(gists)
-        print(f"📝 Contenido generado:\n{md_content}")
+        
+        if md_content:
+            print(f"📝 Contenido generado:\n{md_content}")
         
         if update_readme(md_content):
             print("✨ Proceso completado exitosamente.")
