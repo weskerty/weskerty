@@ -13,5 +13,5 @@
 <h3 align="left">Gist:</h3>
 
 <!-- GIST-LIST:START -->
-No hay gists públicos disponibles.
+
 <!-- GIST-LIST:END -->
