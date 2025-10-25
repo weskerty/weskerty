@@ -1,5 +1,5 @@
 <h1 align="center">Bienvenido</h1>
-<h3 align="center">Lleva lo que Necesites</h3>
+<h3>Estos son mis Hijos:</h3>
 
 
 | Mi Server: | Mi PC: |
@@ -15,3 +15,4 @@ Mi Religion:
 <a href="https://termux.dev/en/" target="_blank" rel="noreferrer"> <img src="https://github.com/user-attachments/assets/2e41ee86-2f42-4945-89e0-9457ceffdbd2" alt="Termux" width="40" height="40"/>
 
 
+<h3 align="center">⬇️ Lleva lo que Necesites👍</h3>
