@@ -1,8 +1,8 @@
 <h1 align="center">Bienvenido</h1>
-<h3>Estos son mis Hijos:</h3>
+<h3>Mis Elementos de Trabajo:</h3>
 
 
-| Mi Server: | Mi PC: |
+| Mi Server: | Mi PC (ya se murio) |
 | :---: | :---: |
 | <a href="https://www.gnu.org/software/bash/" target="_blank" rel="noreferrer"><img src="https://github.com/user-attachments/assets/5f4ebf1b-e1da-4cf4-b9d2-dea05e68ab03" width="300" height="200" alt="Mi Servidor"></a> | <img width="300" height="238" alt="Mi PC" src="https://github.com/user-attachments/assets/719d43de-9063-4939-8882-fe88cbd79fd5" /> |
 
