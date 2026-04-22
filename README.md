@@ -1,4 +1,7 @@
 <h1 align="center">Bienvenido</h1>
+
+<img width="1500" height="90" alt="124648" src="https://github.com/user-attachments/assets/02915b70-1b3e-46ce-baf5-e84fa24da65e" />
+
 <h3>Mis Elementos de Trabajo:</h3>
 
 
